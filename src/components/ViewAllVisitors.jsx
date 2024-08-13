@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from './NavBar'
+import axios from 'axios'
 
 const ViewAllVisitors = () => {
+    const [data, changeData] = useState([])
+    const fetchData=()=>{
+        axios.get("http://172.16.12.153:4000/getvistors").then(
+            (response)=>{
+                changeData(response.data)
+            }
+        ).catch()
+    }
+    useEffect(
+        ()=>{fetchData()},[]
+    )
     return (
         <div>
-            <NavBar/>
+            <NavBar />
             <div className="container">
                 <div className="row">
                     <div className="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
@@ -19,20 +31,23 @@ const ViewAllVisitors = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Gautham</td>
-                                    <td>Babu</td>
-                                    <td>Enquiry</td>
-                                    <td>David</td>
-                                    <td>13.08.24</td>
-                                </tr>
-                                <tr>
-                                    <td>Saira</td>
-                                    <td>Sajan</td>
-                                    <td>Enquiry</td>
-                                    <td>Sreela</td>
-                                    <td>12.08.24</td>
-                                </tr>
+
+
+                                {
+                                    data.map(
+                                        (value,index)=>{
+                                            return <tr>
+                                            <td>{value.firstname}</td>
+                                            <td>{value.lastname}</td>
+                                            <td>{value.purpose}</td>
+                                            <td>{value.whomToMeet}</td>
+                                            <td>{value.date}</td>
+                                        </tr>
+                                        }
+                                    )
+                                }
+
+
                             </tbody>
                         </table>
                     </div>
